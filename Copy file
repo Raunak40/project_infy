@@ -1,0 +1,180 @@
+TS part
+
+
+import { Component } from '@angular/core';
+
+interface Plan {
+  id: string;
+  name: string;
+  price: number;
+  currency: string;
+  billingFrequency: string;
+  setupFee: number;
+  trialDays: number;
+  status: string;
+  features: string[];
+}
+
+@Component({
+  selector: 'app-plans',
+  templateUrl: './plans.component.html',
+  styleUrls: ['./plans.component.scss']
+})
+export class PlansComponent {
+
+  searchTerm: string = '';
+  isAddDialogOpen: boolean = false;
+
+  plans: Plan[] = [
+    {
+      id: 'P001',
+      name: 'Professional',
+      price: 99,
+      currency: 'USD',
+      billingFrequency: 'monthly',
+      setupFee: 10,
+      trialDays: 14,
+      status: 'active',
+      features: ['Feature 1', 'Feature 2', 'Feature 3']
+    },
+    {
+      id: 'P002',
+      name: 'Basic',
+      price: 49,
+      currency: 'USD',
+      billingFrequency: 'monthly',
+      setupFee: 0,
+      trialDays: 7,
+      status: 'inactive',
+      features: ['Feature A', 'Feature B']
+    }
+  ];
+
+  get filteredPlans(): Plan[] {
+    return this.plans.filter(plan =>
+      plan.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      plan.id.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
+  handleAddPlan(form: any) {
+    if (form.valid) {
+      console.log('Plan Created:', form.value);
+      alert('Plan created successfully');
+      this.isAddDialogOpen = false;
+      form.reset();
+    }
+  }
+
+  handleArchivePlan(plan: Plan) {
+    plan.status = 'archived';
+    alert(`Plan "${plan.name}" archived successfully`);
+  }
+}
+
+
+
+HTML PART
+
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <h1>Plan Management</h1>
+      <p>Configure subscription plans and pricing models</p>
+    </div>
+    <button (click)="isAddDialogOpen = true">+ Create Plan</button>
+  </div>
+
+  <!-- Add Plan Modal -->
+  <div class="modal" *ngIf="isAddDialogOpen">
+    <form #planForm="ngForm" (ngSubmit)="handleAddPlan(planForm)">
+
+      <h2>Create New Plan</h2>
+
+      <input name="name" ngModel required placeholder="Plan Name">
+
+      <input name="price" type="number" ngModel required placeholder="Price">
+
+      <select name="currency" ngModel required>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+      </select>
+
+      <select name="billingFrequency" ngModel required>
+        <option value="monthly">Monthly</option>
+        <option value="yearly">Yearly</option>
+      </select>
+
+      <input name="setupFee" type="number" ngModel placeholder="Setup Fee">
+      <input name="trialDays" type="number" ngModel placeholder="Trial Days">
+
+      <select name="status" ngModel required>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+
+      <div class="actions">
+        <button type="button" (click)="isAddDialogOpen = false">Cancel</button>
+        <button type="submit">Create</button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- Search -->
+  <input
+    type="text"
+    [(ngModel)]="searchTerm"
+    placeholder="Search plans..."
+  />
+
+  <!-- Plans Grid -->
+  <div class="grid">
+    <div class="card" *ngFor="let plan of filteredPlans">
+
+      <div class="status">{{ plan.status }}</div>
+
+      <h2>{{ plan.name }}</h2>
+
+      <p class="price">
+        ${{ plan.price }} / {{ plan.billingFrequency }}
+      </p>
+
+      <p>{{ plan.currency }}</p>
+
+      <div class="details">
+        <p><b>ID:</b> {{ plan.id }}</p>
+
+        <p *ngIf="plan.setupFee > 0">
+          <b>Setup Fee:</b> ${{ plan.setupFee }}
+        </p>
+
+        <p *ngIf="plan.trialDays > 0">
+          <b>Trial:</b> {{ plan.trialDays }} days
+        </p>
+      </div>
+
+      <ul>
+        <li *ngFor="let feature of plan.features">
+          ✔ {{ feature }}
+        </li>
+      </ul>
+
+      <div class="actions">
+        <button>Edit</button>
+
+        <button
+          *ngIf="plan.status !== 'archived'"
+          (click)="handleArchivePlan(plan)"
+        >
+          Archive
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
