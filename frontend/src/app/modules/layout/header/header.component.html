@@ -1,0 +1,29 @@
+<header class="top-header">
+  <div class="header-left">
+    <h2 class="page-title">
+      <ng-content></ng-content>
+    </h2>
+  </div>
+
+  <div class="header-right">
+    <div class="user-menu" (click)="toggleDropdown()">
+      <div class="user-avatar-sm">
+        {{ currentUser?.name?.charAt(0)?.toUpperCase() }}
+      </div>
+      <span class="user-name-header">{{ currentUser?.name }}</span>
+      <i class="fas fa-chevron-down chevron"></i>
+
+      <div class="dropdown-menu-custom" *ngIf="showDropdown">
+        <div class="dropdown-header">
+          <strong>{{ currentUser?.name }}</strong>
+          <small>{{ currentUser?.email }}</small>
+          <span class="role-badge" *ngFor="let role of currentUser?.roles">{{ role }}</span>
+        </div>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" (click)="logout()">
+          <i class="fas fa-sign-out-alt me-2"></i> Sign Out
+        </a>
+      </div>
+    </div>
+  </div>
+</header>

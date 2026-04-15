@@ -1,0 +1,70 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="logo-icon">
+        <i class="fas fa-file-invoice-dollar"></i>
+      </div>
+      <h1>Billing Platform</h1>
+      <p class="subtitle">Subscription & Billing Management</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="alert alert-danger" *ngIf="errorMessage">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        {{ errorMessage }}
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="email" class="form-label">Email Address</label>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="fas fa-envelope"></i>
+          </span>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            formControlName="email"
+            placeholder="admin@billing.com"
+            [class.is-invalid]="f['email'].touched && f['email'].invalid"
+          />
+          <div class="invalid-feedback" *ngIf="f['email'].touched && f['email'].errors">
+            <span *ngIf="f['email'].errors?.['required']">Please provide a valid email</span>
+            <span *ngIf="f['email'].errors?.['email']">Please provide a valid email format</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group mb-4">
+        <label for="password" class="form-label">Password</label>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="fas fa-lock"></i>
+          </span>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            formControlName="password"
+            placeholder="Enter your password"
+            [class.is-invalid]="f['password'].touched && f['password'].invalid"
+          />
+          <div class="invalid-feedback" *ngIf="f['password'].touched && f['password'].errors">
+            <span *ngIf="f['password'].errors?.['required']">Please provide a valid password</span>
+            <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 8 characters</span>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 btn-login" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+        <span *ngIf="!loading"><i class="fas fa-sign-in-alt me-2"></i></span>
+        {{ loading ? 'Signing in...' : 'Sign In' }}
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <small class="text-muted">Default: admin@billing.com / Admin@123</small>
+    </div>
+  </div>
+</div>

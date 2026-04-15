@@ -1,0 +1,84 @@
+<div class="dashboard-container">
+  <app-header>Dashboard</app-header>
+
+  <div class="dashboard-content">
+    <div class="welcome-banner">
+      <div class="welcome-text">
+        <h2>Welcome back, {{ userName }}!</h2>
+        <p>Here's an overview of your billing platform.</p>
+      </div>
+      <div class="welcome-roles">
+        <span class="badge-role" *ngFor="let role of userRoles">{{ role }}</span>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon blue">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">—</span>
+          <span class="stat-label">Total Customers</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon green">
+          <i class="fas fa-sync-alt"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">—</span>
+          <span class="stat-label">Active Subscriptions</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon orange">
+          <i class="fas fa-file-invoice"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">—</span>
+          <span class="stat-label">Pending Invoices</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon purple">
+          <i class="fas fa-dollar-sign"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">—</span>
+          <span class="stat-label">Monthly Revenue</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-actions" *ngIf="hasRole('ADMIN') || hasRole('BILLING_MANAGER')">
+      <h5 class="section-title">Quick Actions</h5>
+      <div class="actions-grid">
+        <a routerLink="/customers" class="action-card">
+          <i class="fas fa-user-plus"></i>
+          <span>Add Customer</span>
+        </a>
+        <a routerLink="/plans" class="action-card">
+          <i class="fas fa-box"></i>
+          <span>Manage Plans</span>
+        </a>
+        <a routerLink="/subscriptions" class="action-card">
+          <i class="fas fa-sync-alt"></i>
+          <span>Subscriptions</span>
+        </a>
+        <a routerLink="/invoices" class="action-card" *ngIf="hasRole('ADMIN') || hasRole('BILLING_MANAGER')">
+          <i class="fas fa-file-invoice"></i>
+          <span>View Invoices</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="info-note" *ngIf="hasRole('VIEWER')">
+      <i class="fas fa-info-circle me-2"></i>
+      You have <strong>Viewer</strong> access. Contact an admin to request additional permissions.
+    </div>
+  </div>
+</div>

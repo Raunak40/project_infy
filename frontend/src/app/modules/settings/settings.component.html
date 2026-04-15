@@ -1,0 +1,120 @@
+<div class="settings-container">
+  <app-header>System Configuration</app-header>
+
+  <div class="settings-content">
+    <!-- Alerts -->
+    <div class="alert alert-success" *ngIf="successMessage">
+      <i class="fas fa-check-circle me-2"></i>{{ successMessage }}
+    </div>
+    <div class="alert alert-danger" *ngIf="errorMessage">
+      <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
+    </div>
+
+    <!-- Loading -->
+    <div class="text-center py-5" *ngIf="loading">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+    <!-- Config Groups -->
+    <div *ngIf="!loading">
+      <div class="config-group" *ngFor="let group of configGroups">
+        <div class="group-header">
+          <i [class]="group.icon"></i>
+          <h5>{{ group.label }}</h5>
+        </div>
+
+        <div class="config-card">
+          <div class="config-row" *ngFor="let config of getConfigsForGroup(group)">
+            <div class="config-info">
+              <span class="config-key">{{ formatKey(config.configKey) }}</span>
+              <small class="config-meta">
+                Last updated by {{ config.updatedBy }} on {{ config.updatedAt | date:'medium' }}
+              </small>
+            </div>
+
+            <div class="config-value-area">
+              <!-- Display mode -->
+              <ng-container *ngIf="editingKey !== config.configKey">
+                <span class="config-value">{{ config.configValue }}</span>
+                <button class="btn btn-sm btn-outline-primary btn-edit"
+                        *ngIf="isAdmin"
+                        (click)="startEdit(config)">
+                  <i class="fas fa-pen"></i>
+                </button>
+              </ng-container>
+
+              <!-- Edit mode -->
+              <ng-container *ngIf="editingKey === config.configKey">
+                <div class="edit-group">
+                  <input type="text"
+                         class="form-control form-control-sm"
+                         [(ngModel)]="editValue"
+                         (keyup.enter)="saveConfig(config)"
+                         (keyup.escape)="cancelEdit()" />
+                  <button class="btn btn-sm btn-primary" (click)="saveConfig(config)" [disabled]="saving">
+                    <i class="fas fa-check"></i>
+                  </button>
+                  <button class="btn btn-sm btn-light" (click)="cancelEdit()">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="empty-group" *ngIf="getConfigsForGroup(group).length === 0">
+            <small class="text-muted">No configurations in this group</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ungrouped -->
+      <div class="config-group" *ngIf="getUngroupedConfigs().length > 0">
+        <div class="group-header">
+          <i class="fas fa-ellipsis-h"></i>
+          <h5>Other Settings</h5>
+        </div>
+        <div class="config-card">
+          <div class="config-row" *ngFor="let config of getUngroupedConfigs()">
+            <div class="config-info">
+              <span class="config-key">{{ formatKey(config.configKey) }}</span>
+              <small class="config-meta">
+                Updated by {{ config.updatedBy }} on {{ config.updatedAt | date:'medium' }}
+              </small>
+            </div>
+            <div class="config-value-area">
+              <ng-container *ngIf="editingKey !== config.configKey">
+                <span class="config-value">{{ config.configValue }}</span>
+                <button class="btn btn-sm btn-outline-primary btn-edit"
+                        *ngIf="isAdmin"
+                        (click)="startEdit(config)">
+                  <i class="fas fa-pen"></i>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="editingKey === config.configKey">
+                <div class="edit-group">
+                  <input type="text" class="form-control form-control-sm"
+                         [(ngModel)]="editValue"
+                         (keyup.enter)="saveConfig(config)"
+                         (keyup.escape)="cancelEdit()" />
+                  <button class="btn btn-sm btn-primary" (click)="saveConfig(config)" [disabled]="saving">
+                    <i class="fas fa-check"></i>
+                  </button>
+                  <button class="btn btn-sm btn-light" (click)="cancelEdit()">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Read-only notice for non-admins -->
+      <div class="info-note" *ngIf="!isAdmin">
+        <i class="fas fa-info-circle me-2"></i>
+        System configurations are <strong>read-only</strong> for your role. Contact an admin to make changes.
+      </div>
+    </div>
+  </div>
+</div>

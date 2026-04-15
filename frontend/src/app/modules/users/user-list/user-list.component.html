@@ -1,0 +1,156 @@
+<div class="users-container">
+  <app-header>User Management</app-header>
+
+  <div class="users-content">
+    <!-- Alerts -->
+    <div class="alert alert-success alert-dismissible" *ngIf="successMessage">
+      <i class="fas fa-check-circle me-2"></i>{{ successMessage }}
+      <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+    </div>
+    <div class="alert alert-danger alert-dismissible" *ngIf="errorMessage">
+      <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
+      <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-cards" *ngIf="!loading">
+      <div class="summary-card">
+        <div class="summary-icon total"><i class="fas fa-users"></i></div>
+        <div class="summary-info">
+          <span class="summary-value">{{ users.length }}</span>
+          <span class="summary-label">Total Users</span>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon active"><i class="fas fa-user-check"></i></div>
+        <div class="summary-info">
+          <span class="summary-value">{{ activeCount }}</span>
+          <span class="summary-label">Active</span>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon inactive"><i class="fas fa-user-slash"></i></div>
+        <div class="summary-info">
+          <span class="summary-value">{{ inactiveCount }}</span>
+          <span class="summary-label">Inactive</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="filters">
+        <div class="search-box">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search users by name, email or role..."
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="applyFilters()"
+          />
+        </div>
+        <select class="form-select status-filter" [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+          <option value="">All Statuses</option>
+          <option value="ACTIVE">Active</option>
+          <option value="INACTIVE">Inactive</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-create" (click)="navigateToCreate()">
+        <i class="fas fa-user-plus me-2"></i>Add User
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div class="text-center py-5" *ngIf="loading">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper" *ngIf="!loading">
+      <table class="table" *ngIf="filteredUsers.length > 0">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of filteredUsers" [class.row-inactive]="!user.isActive">
+            <td>
+              <div class="user-cell">
+                <div class="avatar-sm" [class.avatar-inactive]="!user.isActive">
+                  {{ user.name.charAt(0).toUpperCase() }}
+                </div>
+                <div class="user-info-cell">
+                  <span class="user-name-cell">{{ user.name }}</span>
+                  <span class="self-badge" *ngIf="isSelf(user)">You</span>
+                </div>
+              </div>
+            </td>
+            <td class="text-muted email-cell">{{ user.email }}</td>
+            <td>
+              <span class="role-badge-static"
+                    [ngClass]="getRoleBadgeClass(getUserPrimaryRole(user))">
+                {{ formatRole(getUserPrimaryRole(user)) }}
+              </span>
+            </td>
+            <td>
+              <span class="status-badge" [ngClass]="user.isActive ? 'status-active' : 'status-inactive'">
+                <i class="fas fa-circle status-dot"></i>
+                {{ user.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td class="text-muted">{{ user.createdAt | date:'mediumDate' }}</td>
+            <td class="text-end">
+              <div class="action-buttons" *ngIf="!isSelf(user)">
+                <button
+                  class="btn btn-sm btn-edit-role"
+                  [routerLink]="['/users', user.id, 'roles']"
+                  title="Change Role">
+                  <i class="fas fa-user-tag me-1"></i>Role
+                </button>
+                <button
+                  *ngIf="!user.isActive"
+                  class="btn btn-sm btn-activate"
+                  (click)="activateUser(user)"
+                  title="Activate this user">
+                  <i class="fas fa-check me-1"></i>Activate
+                </button>
+                <button
+                  *ngIf="user.isActive"
+                  class="btn btn-sm btn-deactivate"
+                  (click)="deactivateUser(user)"
+                  title="Deactivate this user">
+                  <i class="fas fa-ban me-1"></i>Deactivate
+                </button>
+              </div>
+              <span class="text-muted self-label" *ngIf="isSelf(user)">
+                <i class="fas fa-lock me-1"></i>Current session
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="empty-state" *ngIf="filteredUsers.length === 0">
+        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+        <p class="text-muted">No users found matching your filters.</p>
+      </div>
+    </div>
+
+    <!-- Role Legend -->
+    <div class="role-legend" *ngIf="!loading">
+      <span class="legend-title">Roles:</span>
+      <span class="legend-item"><span class="legend-dot dot-admin"></span> Admin — Full system access</span>
+      <span class="legend-item"><span class="legend-dot dot-billing"></span> Billing Manager — Manage billing & subscriptions</span>
+      <span class="legend-item"><span class="legend-dot dot-viewer"></span> Viewer — Read-only access</span>
+    </div>
+  </div>
+</div>

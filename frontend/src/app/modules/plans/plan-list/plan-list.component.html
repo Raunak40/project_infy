@@ -1,0 +1,87 @@
+<div class="plans-container">
+  <app-header>Plan Management</app-header>
+
+  <div class="plans-content">
+    <div class="alert alert-success" *ngIf="successMessage">
+      <i class="fas fa-check-circle me-2"></i>{{ successMessage }}
+    </div>
+    <div class="alert alert-danger" *ngIf="errorMessage">
+      <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
+    </div>
+
+    <div class="toolbar">
+      <div class="filters">
+        <div class="search-box">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" class="form-control" placeholder="Search plans..."
+                 [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" />
+        </div>
+        <select class="form-select status-select" [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+          <option value="">All Statuses</option>
+          <option value="ACTIVE">Active</option>
+          <option value="INACTIVE">Inactive</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-create" *ngIf="canEdit" (click)="navigateToCreate()">
+        <i class="fas fa-plus me-2"></i>New Plan
+      </button>
+    </div>
+
+    <div class="text-center py-5" *ngIf="loading">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+    <div class="plans-grid" *ngIf="!loading">
+      <div class="plan-card" *ngFor="let plan of filteredPlans"
+           [class.inactive]="plan.status === 'INACTIVE'">
+        <div class="plan-card-header">
+          <div class="plan-name-row">
+            <h5 class="plan-name">{{ plan.name }}</h5>
+            <span class="status-badge"
+                  [ngClass]="plan.status === 'ACTIVE' ? 'status-active' : 'status-inactive'">
+              {{ plan.status }}
+            </span>
+          </div>
+          <span class="plan-freq">{{ formatFrequency(plan.billingFrequency) }}</span>
+        </div>
+
+        <div class="plan-price">
+          <span class="price-amount">{{ formatCurrency(plan.price, plan.currency) }}</span>
+          <span class="price-period">/ {{ plan.billingFrequency === 'MONTHLY' ? 'mo' : plan.billingFrequency === 'QUARTERLY' ? 'qtr' : 'yr' }}</span>
+        </div>
+
+        <div class="plan-details">
+          <div class="detail-item" *ngIf="plan.setupFee > 0">
+            <i class="fas fa-tag"></i>
+            <span>Setup fee: {{ formatCurrency(plan.setupFee, plan.currency) }}</span>
+          </div>
+          <div class="detail-item" *ngIf="plan.trialPeriodDays > 0">
+            <i class="fas fa-clock"></i>
+            <span>{{ plan.trialPeriodDays }}-day trial</span>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-percent"></i>
+            <span>{{ plan.taxApplicable ? 'Tax applicable' : 'Tax exempt' }}</span>
+          </div>
+        </div>
+
+        <div class="plan-actions" *ngIf="canEdit">
+          <button class="btn btn-sm btn-outline-primary" [routerLink]="['/plans', plan.id, 'edit']">
+            <i class="fas fa-pen me-1"></i>Edit
+          </button>
+          <button class="btn btn-sm"
+                  [ngClass]="plan.status === 'ACTIVE' ? 'btn-outline-warning' : 'btn-outline-success'"
+                  (click)="toggleStatus(plan)">
+            <i class="fas" [ngClass]="plan.status === 'ACTIVE' ? 'fa-ban' : 'fa-check'" class="me-1"></i>
+            {{ plan.status === 'ACTIVE' ? 'Deactivate' : 'Activate' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="filteredPlans.length === 0">
+        <i class="fas fa-box fa-3x text-muted mb-3"></i>
+        <p class="text-muted">No plans found.</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+<div class="customer-form-container">
+  <app-header>{{ isEditMode ? 'Edit Customer' : 'Create Customer' }}</app-header>
+
+  <div class="form-content">
+    <div class="form-card">
+      <div class="text-center py-4" *ngIf="loadingCustomer">
+        <div class="spinner-border text-primary"></div>
+      </div>
+
+      <div class="alert alert-danger" *ngIf="errorMessage">
+        <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
+      </div>
+
+      <form [formGroup]="customerForm" (ngSubmit)="onSubmit()" novalidate *ngIf="!loadingCustomer">
+        <div class="form-group mb-3">
+          <label class="form-label">Customer Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="name"
+                 placeholder="Company or individual name"
+                 [class.is-invalid]="f['name'].touched && f['name'].invalid" />
+          <div class="invalid-feedback" *ngIf="f['name'].touched && f['name'].errors">
+            <span *ngIf="f['name'].errors?.['required']">Please provide a valid customer name</span>
+          </div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label class="form-label">Email <span class="text-danger">*</span></label>
+          <input type="email" class="form-control" formControlName="email"
+                 placeholder="billing@company.com"
+                 [class.is-invalid]="f['email'].touched && f['email'].invalid" />
+          <div class="invalid-feedback" *ngIf="f['email'].touched && f['email'].errors">
+            <span *ngIf="f['email'].errors?.['required']">Please provide a valid email</span>
+            <span *ngIf="f['email'].errors?.['email']">Please provide a valid email format</span>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-6">
+            <label class="form-label">Phone</label>
+            <input type="text" class="form-control" formControlName="phone"
+                   placeholder="+1 555 000 0000"
+                   [class.is-invalid]="f['phone'].touched && f['phone'].invalid" />
+            <div class="invalid-feedback" *ngIf="f['phone'].touched && f['phone'].errors">
+              <span *ngIf="f['phone'].errors?.['pattern']">Please provide a valid phone number (7-20 digits, may include +, spaces, dashes)</span>
+            </div>
+          </div>
+          <div class="col-6">
+            <label class="form-label">Tax ID</label>
+            <input type="text" class="form-control" formControlName="taxId"
+                   placeholder="Tax identifier" />
+          </div>
+        </div>
+
+        <div class="form-group mb-4">
+          <label class="form-label">Billing Address</label>
+          <textarea class="form-control" formControlName="billingAddress"
+                    rows="3" placeholder="Full billing address"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-light" (click)="cancel()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            {{ isEditMode ? 'Update Customer' : 'Create Customer' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

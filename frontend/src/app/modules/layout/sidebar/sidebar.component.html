@@ -1,0 +1,36 @@
+<nav class="sidebar" [class.collapsed]="isCollapsed">
+  <div class="sidebar-header">
+    <div class="brand" *ngIf="!isCollapsed">
+      <i class="fas fa-file-invoice-dollar brand-icon"></i>
+      <span class="brand-text">BillFlow</span>
+    </div>
+    <button class="btn-toggle" (click)="toggleSidebar()">
+      <i class="fas" [ngClass]="isCollapsed ? 'fa-angle-right' : 'fa-angle-left'"></i>
+    </button>
+  </div>
+
+  <ul class="nav-list">
+    <li *ngFor="let item of visibleNavItems" class="nav-item">
+      <a [routerLink]="item.route"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+         class="nav-link"
+         [title]="isCollapsed ? item.label : ''">
+        <i [class]="item.icon"></i>
+        <span class="nav-label" *ngIf="!isCollapsed">{{ item.label }}</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="sidebar-footer" *ngIf="currentUser && !isCollapsed">
+    <div class="user-info">
+      <div class="user-avatar">
+        {{ currentUser.name.charAt(0).toUpperCase() }}
+      </div>
+      <div class="user-details">
+        <span class="user-name">{{ currentUser.name }}</span>
+        <span class="user-role">{{ currentUser.roles[0] }}</span>
+      </div>
+    </div>
+  </div>
+</nav>

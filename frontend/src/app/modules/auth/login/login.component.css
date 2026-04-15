@@ -1,0 +1,110 @@
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  padding: 1rem;
+}
+
+.login-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.logo-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #2c5364, #203a43);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  color: #fff;
+  font-size: 1.75rem;
+}
+
+.login-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.25rem;
+}
+
+.subtitle {
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #344054;
+}
+
+.input-group-text {
+  background: #f8f9fa;
+  border-right: none;
+  color: #6c757d;
+}
+
+.form-control {
+  border-left: none;
+  font-size: 0.9rem;
+  padding: 0.6rem 0.75rem;
+}
+
+.form-control:focus {
+  border-color: #2c5364;
+  box-shadow: 0 0 0 0.2rem rgba(44, 83, 100, 0.15);
+}
+
+.input-group:focus-within .input-group-text {
+  border-color: #2c5364;
+}
+
+.btn-login {
+  padding: 0.65rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #2c5364, #203a43);
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.btn-login:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(44, 83, 100, 0.4);
+  background: linear-gradient(135deg, #203a43, #0f2027);
+}
+
+.btn-login:disabled {
+  opacity: 0.7;
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.alert-danger {
+  border-radius: 10px;
+  font-size: 0.875rem;
+  border: none;
+  background: #fff5f5;
+  color: #c53030;
+}

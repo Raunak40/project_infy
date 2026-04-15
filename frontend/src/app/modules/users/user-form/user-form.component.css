@@ -1,0 +1,105 @@
+.user-form-container {
+  flex: 1;
+}
+
+.form-content {
+  padding: 1.5rem 2rem;
+  max-width: 640px;
+}
+
+.form-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.edit-user-info {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.user-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.avatar-md {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2c5364, #203a43);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #344054;
+  margin-bottom: 0.4rem;
+}
+
+.form-control, .form-select {
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.875rem;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #2c5364;
+  box-shadow: 0 0 0 3px rgba(44, 83, 100, 0.1);
+}
+
+.role-descriptions {
+  margin-top: 0.5rem;
+}
+
+.role-hint {
+  display: block;
+  font-size: 0.78rem;
+  color: #64748b;
+  padding: 0.4rem 0.65rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.form-actions .btn-primary {
+  border-radius: 10px;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #2c5364, #203a43);
+  border: none;
+}
+
+.form-actions .btn-light {
+  border-radius: 10px;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  border: 1px solid #e2e8f0;
+}
+
+.alert-danger {
+  border-radius: 10px;
+  font-size: 0.875rem;
+  border: none;
+  background: #fef2f2;
+  color: #991b1b;
+  margin-bottom: 1rem;
+}

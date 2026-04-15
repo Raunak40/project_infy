@@ -1,0 +1,10 @@
+<div class="app-container" *ngIf="showLayout; else noLayout">
+  <app-sidebar></app-sidebar>
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<ng-template #noLayout>
+  <router-outlet></router-outlet>
+</ng-template>

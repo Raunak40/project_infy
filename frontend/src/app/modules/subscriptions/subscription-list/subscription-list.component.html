@@ -1,0 +1,99 @@
+<div class="subscriptions-container">
+  <app-header>Subscriptions</app-header>
+
+  <div class="subscriptions-content">
+    <div class="alert alert-success" *ngIf="successMessage"><i class="fas fa-check-circle me-2"></i>{{ successMessage }}</div>
+    <div class="alert alert-danger" *ngIf="errorMessage"><i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}</div>
+
+    <div class="toolbar">
+      <div class="filters">
+        <div class="search-box">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" class="form-control" placeholder="Search by customer or plan..."
+                 [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" />
+        </div>
+        <select class="form-select status-select" [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+          <option value="">All Statuses</option>
+          <option value="PENDING">Pending</option>
+          <option value="ACTIVE">Active</option>
+          <option value="SUSPENDED">Suspended</option>
+          <option value="CANCELLED">Cancelled</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-create" *ngIf="canEdit" (click)="navigateToCreate()">
+        <i class="fas fa-plus me-2"></i>New Subscription
+      </button>
+    </div>
+
+    <div class="text-center py-5" *ngIf="loading"><div class="spinner-border text-primary"></div></div>
+
+    <div class="table-wrapper" *ngIf="!loading">
+      <table class="table" *ngIf="filteredSubscriptions.length > 0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Plan (Snapshot)</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Start Date</th>
+            <th>Next Billing</th>
+            <th class="text-end" *ngIf="canEdit">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sub of filteredSubscriptions">
+            <td class="text-muted">#{{ sub.id }}</td>
+            <td>
+              <div class="customer-cell">
+                <span class="code-badge">{{ sub.customerCode }}</span>
+                <span>{{ sub.customerName }}</span>
+              </div>
+            </td>
+            <td>{{ sub.planNameSnapshot }}</td>
+            <td class="fw-semibold">{{ formatCurrency(sub.planPriceSnapshot, sub.currency) }}</td>
+            <td><span class="status-badge" [ngClass]="getStatusClass(sub.status)">{{ sub.status }}</span></td>
+            <td class="text-muted">{{ sub.startDate | date:'mediumDate' }}</td>
+            <td class="text-muted">{{ sub.nextBillingDate ? (sub.nextBillingDate | date:'mediumDate') : '—' }}</td>
+            <td class="text-end" *ngIf="canEdit">
+              <button *ngIf="sub.status === 'PENDING'" class="btn btn-sm btn-outline-success me-1" (click)="activate(sub)" title="Activate">
+                <i class="fas fa-play"></i>
+              </button>
+              <button *ngIf="sub.status === 'ACTIVE'" class="btn btn-sm btn-outline-warning me-1" (click)="openSuspendModal(sub.id)" title="Suspend">
+                <i class="fas fa-pause"></i>
+              </button>
+              <button *ngIf="sub.status === 'SUSPENDED'" class="btn btn-sm btn-outline-success me-1" (click)="reactivate(sub)" title="Reactivate">
+                <i class="fas fa-redo"></i>
+              </button>
+              <button *ngIf="sub.status === 'ACTIVE' || sub.status === 'SUSPENDED'"
+                      class="btn btn-sm btn-outline-danger" (click)="cancel(sub)" title="Cancel">
+                <i class="fas fa-times"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="empty-state" *ngIf="filteredSubscriptions.length === 0">
+        <i class="fas fa-sync-alt fa-3x text-muted mb-3"></i>
+        <p class="text-muted">No subscriptions found.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Suspend Modal -->
+  <div class="modal-backdrop" *ngIf="showSuspendModal" (click)="showSuspendModal = false"></div>
+  <div class="modal-dialog-custom" *ngIf="showSuspendModal">
+    <div class="modal-content-custom">
+      <h5><i class="fas fa-pause-circle me-2 text-warning"></i>Suspend Subscription</h5>
+      <p class="text-muted">Please provide a reason for suspension. This is mandatory.</p>
+      <textarea class="form-control mb-3" [(ngModel)]="suspendReason" rows="3"
+                placeholder="Enter suspension reason..."></textarea>
+      <div class="modal-actions">
+        <button class="btn btn-light" (click)="showSuspendModal = false">Cancel</button>
+        <button class="btn btn-warning" (click)="confirmSuspend()" [disabled]="!suspendReason.trim()">
+          Confirm Suspension
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

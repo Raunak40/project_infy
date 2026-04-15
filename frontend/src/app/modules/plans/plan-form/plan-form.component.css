@@ -1,0 +1,21 @@
+.plan-form-container { flex: 1; }
+.form-content { padding: 1.5rem 2rem; max-width: 640px; }
+
+.form-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.form-label { font-weight: 600; font-size: 0.85rem; color: #344054; margin-bottom: 0.4rem; }
+.form-control, .form-select { border-radius: 10px; border: 1px solid #e2e8f0; padding: 0.6rem 0.85rem; font-size: 0.875rem; }
+.form-control:focus, .form-select:focus { border-color: #2c5364; box-shadow: 0 0 0 3px rgba(44, 83, 100, 0.1); }
+
+.form-actions { display: flex; justify-content: flex-end; gap: 0.75rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
+.form-actions .btn-primary { border-radius: 10px; padding: 0.5rem 1.5rem; font-weight: 600; background: linear-gradient(135deg, #2c5364, #203a43); border: none; }
+.form-actions .btn-light { border-radius: 10px; padding: 0.5rem 1.5rem; font-weight: 600; border: 1px solid #e2e8f0; }
+
+.alert { border-radius: 10px; font-size: 0.875rem; border: none; margin-bottom: 1rem; }
+.alert-danger { background: #fef2f2; color: #991b1b; }
+.alert-warning { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }

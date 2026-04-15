@@ -1,0 +1,69 @@
+<div class="subscription-form-container">
+  <app-header>Create Subscription</app-header>
+
+  <div class="form-content">
+    <div class="form-card">
+      <div class="alert alert-danger" *ngIf="errorMessage">
+        <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
+      </div>
+
+      <form [formGroup]="subscriptionForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="form-group mb-3">
+          <label class="form-label">Customer <span class="text-danger">*</span></label>
+          <select class="form-select" formControlName="customerId"
+                  [class.is-invalid]="f['customerId'].touched && f['customerId'].invalid">
+            <option value="">Select a customer...</option>
+            <option *ngFor="let c of customers" [value]="c.id">{{ c.customerCode }} — {{ c.name }}</option>
+          </select>
+          <div class="invalid-feedback">Please select a customer</div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label class="form-label">Plan <span class="text-danger">*</span></label>
+          <select class="form-select" formControlName="planId"
+                  [class.is-invalid]="f['planId'].touched && f['planId'].invalid">
+            <option value="">Select a plan...</option>
+            <option *ngFor="let p of plans" [value]="p.id">{{ p.name }} — {{ formatCurrency(p.price, p.currency) }}/{{ p.billingFrequency }}</option>
+          </select>
+          <div class="invalid-feedback">Please select a plan</div>
+        </div>
+
+        <!-- Plan preview -->
+        <div class="plan-preview" *ngIf="selectedPlan">
+          <h6>Plan Snapshot Preview</h6>
+          <div class="preview-row">
+            <span>Plan Name:</span><strong>{{ selectedPlan.name }}</strong>
+          </div>
+          <div class="preview-row">
+            <span>Price:</span><strong>{{ formatCurrency(selectedPlan.price, selectedPlan.currency) }} / {{ selectedPlan.billingFrequency }}</strong>
+          </div>
+          <div class="preview-row" *ngIf="selectedPlan.setupFee > 0">
+            <span>Setup Fee:</span><strong>{{ formatCurrency(selectedPlan.setupFee, selectedPlan.currency) }}</strong>
+          </div>
+          <div class="preview-row" *ngIf="selectedPlan.trialPeriodDays > 0">
+            <span>Trial:</span><strong>{{ selectedPlan.trialPeriodDays }} days</strong>
+          </div>
+          <small class="text-muted d-block mt-1">
+            <i class="fas fa-info-circle me-1"></i>
+            This price will be snapshotted and will not change even if the plan is updated later.
+          </small>
+        </div>
+
+        <div class="form-group mb-4">
+          <label class="form-label">Start Date <span class="text-danger">*</span></label>
+          <input type="date" class="form-control" formControlName="startDate"
+                 [class.is-invalid]="f['startDate'].touched && f['startDate'].invalid" />
+          <div class="invalid-feedback">Please provide a valid start date</div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-light" (click)="cancel()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            Create Subscription
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

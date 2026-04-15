@@ -1,0 +1,64 @@
+.plans-container { flex: 1; }
+.plans-content { padding: 1.5rem 2rem; }
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filters { display: flex; gap: 0.75rem; flex: 1; }
+
+.search-box { position: relative; flex: 1; max-width: 320px; }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.85rem; }
+.search-box .form-control { padding-left: 2.25rem; border-radius: 10px; border: 1px solid #e2e8f0; font-size: 0.875rem; }
+
+.status-select { width: 160px; border-radius: 10px; border: 1px solid #e2e8f0; font-size: 0.875rem; }
+
+.btn-create { border-radius: 10px; padding: 0.5rem 1.25rem; font-weight: 600; font-size: 0.875rem; background: linear-gradient(135deg, #2c5364, #203a43); border: none; }
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.plan-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.2s;
+}
+
+.plan-card:hover { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); }
+.plan-card.inactive { opacity: 0.65; }
+
+.plan-card-header { margin-bottom: 0.75rem; }
+.plan-name-row { display: flex; justify-content: space-between; align-items: center; }
+.plan-name { font-size: 1.05rem; font-weight: 700; color: #1e293b; margin: 0; }
+.plan-freq { font-size: 0.75rem; color: #64748b; font-weight: 500; }
+
+.status-badge { font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.3px; }
+.status-active { background: #dcfce7; color: #16a34a; }
+.status-inactive { background: #fee2e2; color: #dc2626; }
+
+.plan-price { margin-bottom: 1rem; }
+.price-amount { font-size: 1.75rem; font-weight: 700; color: #0f172a; }
+.price-period { font-size: 0.85rem; color: #94a3b8; font-weight: 500; }
+
+.plan-details { margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem; }
+.detail-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #64748b; }
+.detail-item i { width: 14px; text-align: center; font-size: 0.75rem; color: #94a3b8; }
+
+.plan-actions { display: flex; gap: 0.5rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
+.plan-actions .btn { border-radius: 8px; font-size: 0.8rem; font-weight: 600; }
+
+.empty-state { text-align: center; padding: 3rem; grid-column: 1 / -1; }
+
+.alert { border-radius: 10px; font-size: 0.875rem; border: none; margin-bottom: 1rem; }
+.alert-success { background: #f0fdf4; color: #166534; }
+.alert-danger { background: #fef2f2; color: #991b1b; }

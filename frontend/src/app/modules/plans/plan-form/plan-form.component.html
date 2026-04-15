@@ -1,0 +1,85 @@
+<div class="plan-form-container">
+  <app-header>{{ isEditMode ? 'Edit Plan' : 'Create Plan' }}</app-header>
+
+  <div class="form-content">
+    <div class="form-card">
+      <div class="text-center py-4" *ngIf="loadingPlan">
+        <div class="spinner-border text-primary"></div>
+      </div>
+
+      <div class="alert alert-danger" *ngIf="errorMessage">
+        <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
+      </div>
+
+      <div class="alert alert-warning" *ngIf="isEditMode">
+        <i class="fas fa-info-circle me-2"></i>
+        Editing a plan does <strong>not</strong> affect existing subscriptions. They retain the price snapshot from when they were created.
+      </div>
+
+      <form [formGroup]="planForm" (ngSubmit)="onSubmit()" novalidate *ngIf="!loadingPlan">
+        <div class="form-group mb-3">
+          <label class="form-label">Plan Name</label>
+          <input type="text" class="form-control" formControlName="name"
+                 placeholder="e.g., Basic Monthly"
+                 [class.is-invalid]="f['name'].touched && f['name'].invalid" />
+          <div class="invalid-feedback" *ngIf="f['name'].touched && f['name'].errors">
+            <span *ngIf="f['name'].errors?.['required']">Please provide a valid plan name</span>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-6">
+            <label class="form-label">Price</label>
+            <input type="number" class="form-control" formControlName="price"
+                   placeholder="29.99" step="0.01"
+                   [class.is-invalid]="f['price'].touched && f['price'].invalid" />
+            <div class="invalid-feedback" *ngIf="f['price'].touched && f['price'].errors">
+              <span *ngIf="f['price'].errors?.['required']">Please provide a valid price</span>
+              <span *ngIf="f['price'].errors?.['min']">Price must be greater than zero</span>
+            </div>
+          </div>
+          <div class="col-6">
+            <label class="form-label">Currency</label>
+            <select class="form-select" formControlName="currency">
+              <option *ngFor="let c of currencies" [value]="c">{{ c }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label class="form-label">Billing Frequency</label>
+          <select class="form-select" formControlName="billingFrequency">
+            <option *ngFor="let f of frequencies" [value]="f">{{ f }}</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-6">
+            <label class="form-label">Setup Fee</label>
+            <input type="number" class="form-control" formControlName="setupFee"
+                   placeholder="0.00" step="0.01" />
+          </div>
+          <div class="col-6">
+            <label class="form-label">Trial Period (days)</label>
+            <input type="number" class="form-control" formControlName="trialPeriodDays"
+                   placeholder="0" min="0" />
+          </div>
+        </div>
+
+        <div class="form-check mb-4">
+          <input type="checkbox" class="form-check-input" id="taxApplicable"
+                 formControlName="taxApplicable" />
+          <label class="form-check-label" for="taxApplicable">Tax Applicable</label>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-light" (click)="cancel()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            {{ isEditMode ? 'Update Plan' : 'Create Plan' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
